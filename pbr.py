@@ -1,48 +1,11 @@
 import csv
-import datetime
 import time
-import urllib.request
 
-from bs4 import BeautifulSoup
+from requests import get_html
 
 base_url = 'https://kabutan.jp/stock/kabuka?code={code}'
 out_file = './pbr.csv'
-max_retry = 5
 sleep_time = 100
-
-
-def get_html(code, retry_cnt=0):
-    url = base_url.format(code=code)
-    if retry_cnt > max_retry:
-        print('URL is invalid => {url}'.format(url=url))
-        return
-    try:
-        html = urllib.request.urlopen(url, timeout=100).read()
-        if html is None:
-            get_html(code, retry_cnt + 1)
-        soup = BeautifulSoup(html, 'lxml')
-        
-        if not is_exists_code(soup):
-            return
-        elif not is_valid_html(soup):
-            get_html(code, retry_cnt + 1)
-        return soup
-    except Exception:
-        get_html(code, retry_cnt + 1)
-
-
-def is_exists_code(soup):
-    if soup.select('.topicpath span')[1].text[:1] == '(':
-        return False
-    else:
-        return True
-
-
-def is_valid_html(soup):
-    if len(soup.select('#stock_kabuka_table')):
-        return True
-    else:
-        return False
 
 
 def get_pbr(soup):
@@ -54,8 +17,7 @@ def main():
         writer = csv.writer(f, quoting=csv.QUOTE_ALL)
         for code in range(1300, 10000):
             time.sleep(sleep_time / 1000)
-            print(code)
-            soup = get_html(code)
+            soup = get_html(base_url.format(code=code))
             try:
                 if soup is not None:
                     writer.writerow([code, get_pbr(soup)])
