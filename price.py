@@ -48,7 +48,7 @@ def is_valid_html(soup):
 def get_price_chart(soup):
     for tr in soup.select('#stock_kabuka_table tr'):
         td_list = list(map(lambda x: x.text, tr.find_all(['td', 'th'])))
-        yield *td_list[:4], *td_list[6:]
+        yield td_list
 
 
 def main():
