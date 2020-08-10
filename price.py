@@ -24,8 +24,8 @@ def get_html(code, retry_cnt=0):
         
         if not is_exists_code(soup):
             return
-        elif not is_valid_html(soup):
-            get_html(code, retry_cnt + 1)
+        elif not is_listing(soup):
+            return
         return soup
     except Exception:
         get_html(code, retry_cnt + 1)
@@ -38,11 +38,8 @@ def is_exists_code(soup):
         return True
 
 
-def is_valid_html(soup):
-    if len(soup.select('#stock_kabuka_table')):
-        return True
-    else:
-        return False
+def is_listing(soup):
+    return len(soup.select('.si_i1_2 img')) == 0
 
 
 def get_price_chart(soup):
