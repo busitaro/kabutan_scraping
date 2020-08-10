@@ -6,7 +6,7 @@ import urllib.request
 from bs4 import BeautifulSoup
 
 base_url = 'https://kabutan.jp/stock/kabuka?code={code}'
-out_file = './price_{code}.csv'
+out_file = './price_{code}_{date}.csv'
 max_retry = 5
 sleep_time = 100
 
@@ -43,7 +43,7 @@ def is_listing(soup):
 
 
 def get_price_chart(soup):
-    for tr in soup.select('#stock_kabuka_table tr')[2:]:
+    for tr in soup.select('#stock_kabuka_table tr')[:2]:
         td_list = list(map(lambda x: x.text, tr.find_all(['td', 'th'])))
         yield td_list
 
