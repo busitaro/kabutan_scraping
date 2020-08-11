@@ -21,7 +21,7 @@ def get_html(url, retry_cnt=0):
         elif not is_listing(soup):
             return
         return soup
-    except Exception:
+    except Exception as e:
         get_html(url, retry_cnt + 1)
 
 
