@@ -1,5 +1,4 @@
 import csv
-import sys
 import time
 
 from requests import get_html
@@ -20,7 +19,7 @@ def get_price_chart(soup):
     return td_list
 
 
-def main(from_code=1300):
+def main():
     for code in range(from_code, 10000):
         time.sleep(sleep_time / 1000)
         out_data = []
@@ -39,9 +38,4 @@ def main(from_code=1300):
 
 
 if __name__ == '__main__':
-    args = sys.argv
-    if len(args) >= 2:
-        from_code = int(args[1])
-    else:
-        from_code = 1
-    main(from_code)
+    main()
