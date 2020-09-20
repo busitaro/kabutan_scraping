@@ -1,4 +1,6 @@
 import csv
+import datetime
+import sys
 import time
 
 from requests import get_html
@@ -19,13 +21,21 @@ def get_price_chart(soup):
     return td_list
 
 
-def main():
-    for code in range(from_code, 10000):
+def format_date(yyyymmdd: str):
+    dt = datetime.datetime.strptime(yyyymmdd, '%Y%m%d')
+    return dt.strftime('%y%m%d')
+
+
+def main(from_date):
+    for code in range(1300, 10000):
         time.sleep(sleep_time / 1000)
         out_data = []
         for soup in get_price_chart_html(code):
             try:
                 if soup is not None:
+                    price_data = list(filter(lambda x: int(x[0].replace('/', '')) >= int(from_date), get_price_chart(soup)))
+                    if len(price_data) == 0:
+                        break
                     out_data.extend(get_price_chart(soup))
             except Exception as e:
                 print('type:{}'.format(str(type(e))))
@@ -38,4 +48,9 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    args = sys.argv
+    if len(args) >= 2:
+        from_date = format_date(args[1])
+    else:
+        from_date = 1
+    main(from_date)
