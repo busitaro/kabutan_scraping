@@ -26,31 +26,54 @@ def format_date(yyyymmdd: str):
     return dt.strftime('%y%m%d')
 
 
-def main(from_date):
-    for code in range(1300, 10000):
-        time.sleep(sleep_time / 1000)
-        out_data = []
-        for soup in get_price_chart_html(code):
-            try:
-                if soup is not None:
-                    price_data = list(filter(lambda x: int(x[0].replace('/', '')) >= int(from_date), get_price_chart(soup)))
-                    if len(price_data) == 0:
-                        break
-                    out_data.extend(get_price_chart(soup))
-            except Exception as e:
-                print('type:{}'.format(str(type(e))))
-                print('args:' + str(e.args))
+def get_data(code, from_date, end_date):
+    out_data = []
+    for soup in get_price_chart_html(code):
+        try:
+            if soup is not None:
+                price_data = list(filter(lambda x: int(x[0].replace('/', '')) >= int(from_date), get_price_chart(soup)))
+                if len(price_data) == 0:
+                    break
+                price_data = list(filter(lambda x: int(x[0].replace('/', '')) <= int(end_date), price_data))
+                out_data.extend(price_data)
+        except Exception as e:
+            print('type:{}'.format(str(type(e))))
+            print('args:' + str(e.args))
+    return out_data
+
+
+def output(code, data):
+    data = sorted(data, key=lambda x: x[0])
+    with open(out_file.format(code=code), 'a', encoding='utf_8', newline='') as f:
+        writer = csv.writer(f, quoting=csv.QUOTE_ALL)
+        writer.writerows(data)
+
+
+def main(code, from_date, end_date):
+    if code != '':
+        out_data = get_data(code, from_date, end_date)
         if len(out_data) > 0:
-            out_data = sorted(out_data, key=lambda x: x[0])
-            with open(out_file.format(code=code), 'a', encoding='utf_8', newline='') as f:
-                writer = csv.writer(f, quoting=csv.QUOTE_ALL)
-                writer.writerows(out_data)
+            output(code, out_data)
+    else:
+        for code in range(1300, 10000):
+            time.sleep(sleep_time / 1000)
+            out_data = get_data(code, from_date, end_date)
+            if len(out_data) > 0:
+                output(code, out_data)
 
 
 if __name__ == '__main__':
     args = sys.argv
+
+    code = ''
+    from_date = 1
+    end_date = 99999999
+
     if len(args) >= 2:
-        from_date = format_date(args[1])
-    else:
-        from_date = 1
-    main(from_date)
+        code = args[1]
+    if len(args) >= 3:
+        from_date = format_date(args[2])
+    if len(args) >= 4:
+        end_date = format_date(args[3])
+
+    main(code, from_date, end_date)
