@@ -10,7 +10,7 @@ def input_data(file_path):
     for file in os.listdir(file_path):
         data[file] = \
             pd.read_csv(
-                'data/{}'.format(file), 
+                '{}/{}'.format(file_path, file), 
                 names=['date', 'begin', 'high', 'low', 'end', 'compare', 'compare_rate', 'turnover'],
                 parse_dates=['date'], 
                 index_col=['date'], 
