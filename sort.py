@@ -14,6 +14,7 @@ def add_separator_to_path(path):
 
 def main(file_path):
     for file, data in input_data(file_path).items():
+        data = data.groupby(level=0).first()
         data.to_csv(file_path + file, encoding='utf-8', quoting=csv.QUOTE_ALL, header=False, date_format='%y/%m/%d')
 
 
