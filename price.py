@@ -6,7 +6,7 @@ import time
 from requests import get_html
 
 base_url = 'https://kabutan.jp/stock/kabuka?code={code}&ashi=day&page={page}'
-out_file = './price_{code}.csv'
+out_file = './data/price_{code}.csv'
 sleep_time = 100
 
 
@@ -36,6 +36,8 @@ def get_data(code, from_date, end_date):
                     break
                 price_data = list(filter(lambda x: int(x[0].replace('/', '')) <= int(end_date), price_data))
                 out_data.extend(price_data)
+            else:
+                break
         except Exception as e:
             print('type:{}'.format(str(type(e))))
             print('args:' + str(e.args))
@@ -70,7 +72,7 @@ if __name__ == '__main__':
     end_date = 99999999
 
     if len(args) >= 2:
-        code = args[1]
+        code = args[1].strip()
     if len(args) >= 3:
         from_date = format_date(args[2])
     if len(args) >= 4:

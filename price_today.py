@@ -5,14 +5,12 @@ import time
 from requests import get_html
 
 base_url = 'https://kabutan.jp/stock/kabuka?code={code}'
-out_file = './price_{code}_{date}.csv'
+out_file =  './data/price_{code}.csv'
 sleep_time = 100
 
 
 def get_price_chart(soup):
-    for tr in soup.select('#stock_kabuka_table tr')[:2]:
-        td_list = list(map(lambda x: x.text, tr.find_all(['td', 'th'])))
-        yield td_list
+    return list(map(lambda x: x.text, soup.select('#stock_kabuka_table tr')[1].find_all(['td', 'th'])))
 
 
 def main():
@@ -22,10 +20,9 @@ def main():
         soup = get_html(base_url.format(code=code))
         try:
             if soup is not None:
-                with open(out_file.format(code=code, date=today), 'w') as f:
+                with open(out_file.format(code=code), 'a', encoding='utf_8', newline='') as f:
                     writer = csv.writer(f, quoting=csv.QUOTE_ALL)
-                    for row in get_price_chart(soup):
-                        writer.writerow(row)
+                    writer.writerow(get_price_chart(soup))
         except Exception as e:
             print('type:{}'.format(str(type(e))))
             print('args:' + str(e.args))
