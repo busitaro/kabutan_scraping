@@ -1,13 +1,21 @@
 import datetime
 import os
+import re
 import pandas as pd
 
-business_day_file='.\\file\\business_day.csv'
+business_day_file='file/business_day.csv'
+exclude_file = 'file/exclude.lst'
 
 
-def input_data(file_path):
+def input_data(file_path, exclude=True):
     data = dict()
+    if exclude:
+        with open(exclude_file, 'r') as f:
+            exclude_list = [code.replace('\n', '') for code in f.readlines()]
     for file in os.listdir(file_path):
+        if exclude:
+            if re.sub('price_|.csv', '', file) in exclude_list:
+                continue
         data[file] = \
             pd.read_csv(
                 '{}/{}'.format(file_path, file), 
