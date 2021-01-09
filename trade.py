@@ -3,8 +3,10 @@ import time
 
 from requests import get_html as g_html
 
+from setting.config import Config
+
 base_url = 'https://kabutan.jp/stock/?code={code}'
-out_file = 'data/trade_{code}.csv'
+out_file = 'trade_{code}.csv'
 sleep_time = 100
 
 
@@ -27,7 +29,9 @@ def get_data(code):
 
 
 def output(code, data):
-    with open(out_file.format(code=code), 'a', encoding='utf_8', newline='') as f:
+    config = Config()
+    path_to_output = '{}/{}'.format(config.output_path(), out_file.format(code=code))
+    with open(path_to_output, 'a', encoding='utf_8', newline='') as f:
         writer = csv.writer(f, quoting=csv.QUOTE_ALL)
         writer.writerow(data)
 

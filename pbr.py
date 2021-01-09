@@ -3,8 +3,10 @@ import time
 
 from requests import get_html
 
+from setting.config import Config
+
 base_url = 'https://kabutan.jp/stock/kabuka?code={code}'
-out_file = './pbr.csv'
+out_file = 'pbr.csv'
 sleep_time = 100
 
 
@@ -13,7 +15,9 @@ def get_pbr(soup):
 
 
 def main():
-    with open(out_file, 'w') as f:
+    config = Config()
+    path_to_output = '{}/{}'.format(config.output_path(), out_file)
+    with open(path_to_output, 'w') as f:
         writer = csv.writer(f, quoting=csv.QUOTE_ALL)
         for code in range(1300, 10000):
             time.sleep(sleep_time / 1000)

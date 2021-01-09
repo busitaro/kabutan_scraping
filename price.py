@@ -5,8 +5,10 @@ import time
 
 from requests import get_html
 
+from setting.config import Config
+
 base_url = 'https://kabutan.jp/stock/kabuka?code={code}&ashi=day&page={page}'
-out_file = './data/price_{code}.csv'
+out_file = 'price_{code}.csv'
 sleep_time = 100
 
 
@@ -46,7 +48,9 @@ def get_data(code, from_date, end_date):
 
 def output(code, data):
     data = sorted(data, key=lambda x: x[0])
-    with open(out_file.format(code=code), 'a', encoding='utf_8', newline='') as f:
+    config = Config()
+    path_to_output = '{}/{}'.format(config.output_path(), out_file.format(code=code))
+    with open(path_to_output, 'a', encoding='utf_8', newline='') as f:
         writer = csv.writer(f, quoting=csv.QUOTE_ALL)
         writer.writerows(data)
 
