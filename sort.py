@@ -2,24 +2,18 @@ import csv
 import sys
 
 from input import input_data
-
-file_path = '.\\'
-
-
-def add_separator_to_path(path):
-    if path[-1:] != '\\':
-        path = path + '\\'
-    return path
+from setting.config import Config
 
 
-def main(file_path):
+def main():
+    config = Config()
+    file_path = config.output_path()
+
     for file, data in input_data(file_path).items():
         data = data.groupby(level=0).last()
-        data.to_csv(file_path + file, encoding='utf-8', quoting=csv.QUOTE_ALL, header=False, date_format='%y/%m/%d')
+        print('{}/{}'.format(file_path, file))
+        data.to_csv('{}/{}'.format(file_path, file), encoding='utf-8', quoting=csv.QUOTE_ALL, header=False, date_format='%y/%m/%d')
 
 
 if __name__ == '__main__':
-    args = sys.argv
-    if len(args) >= 2:
-        file_path = args[1]
-    main(add_separator_to_path(file_path))
+    main()
