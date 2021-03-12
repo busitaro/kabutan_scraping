@@ -17,13 +17,16 @@ def input_data(dir_path, exclude=True):
             if exclude:
                 if re.sub('price_|.csv', '', file) in exclude_list:
                     continue
-            data[file] = \
-                pd.read_csv(
-                    '{}/{}'.format(dir_path, file), 
-                    names=['date', 'begin', 'high', 'low', 'end', 'compare', 'compare_rate', 'turnover'],
-                    parse_dates=['date'], 
-                    index_col=['date'], 
-                    date_parser=lambda date: datetime.datetime.strptime(date, '%y/%m/%d')).sort_index()
+            try:
+                data[file] = \
+                    pd.read_csv(
+                        '{}/{}'.format(dir_path, file), 
+                        names=['date', 'begin', 'high', 'low', 'end', 'compare', 'compare_rate', 'turnover'],
+                        parse_dates=['date'], 
+                        index_col=['date'], 
+                        date_parser=lambda date: datetime.datetime.strptime(date, '%y/%m/%d')).sort_index()
+            except:
+                print('input error file: {}'.format(file))
     return data
 
 
