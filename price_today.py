@@ -34,7 +34,7 @@ def get_price_data(code: str) -> list:
         data = get_price_chart(soup)
         return data
     else:
-        raise ValueError('soup is None (code: {})'.format(code))
+        return
 
 
 def output_price_data(code: str, data: list):
@@ -66,7 +66,7 @@ def price_today(code: str):
     """
     try:
         data = get_price_data(code)
-        if len(data) > 0:
+        if data is not None and len(data) > 0:
             output_price_data(code, data)
     except Exception as e:
         print('type:{}'.format(str(type(e))))
