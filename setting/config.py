@@ -13,6 +13,7 @@ class Config():
         self._parser = configparser.ConfigParser()
         self._parser.read(path_to_config_file, encoding='utf_8')
     
+    @property
     def output_path(self):
         section = 'DEFAULT'
         key = 'OutputDir'
