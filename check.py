@@ -38,11 +38,11 @@ def get_days_with_no_data(
 
     for file_name, data in check_data.items():
         # ファイル名から、銘柄コードを取得
-        code = re.sub('price_|.csv', '', file_name)
+        code = re.sub('price_|trade_|.csv', '', file_name)
         # チェック対象営業日とデータをマージし、
         # データがNaNの日を抽出
         check_data = pd.merge(check_business_day.copy(), data, left_on='date', right_index=True, how='left')
-        no_data_date = list(check_data[check_data['begin'].isna()].index)
+        no_data_date = list(check_data[check_data[check_data.columns[0]].isna()].index)
         if len(no_data_date) > 0:
             check_result[code] = no_data_date
 
