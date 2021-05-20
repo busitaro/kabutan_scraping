@@ -30,7 +30,7 @@ def get_data(code):
 
 def output(code, data):
     config = Config()
-    path_to_output = '{}/{}'.format(config.output_path(), out_file.format(code=code))
+    path_to_output = '{}/{}'.format(config.output_path, out_file.format(code=code))
     with open(path_to_output, 'a', encoding='utf_8', newline='') as f:
         writer = csv.writer(f, quoting=csv.QUOTE_ALL)
         writer.writerow(data)
@@ -40,7 +40,7 @@ def main():
     for code in range(1300, 10000):
         time.sleep(sleep_time / 1000)
         out_data = get_data(code)
-        if len(out_data) != 0:
+        if len(out_data) != 0 or out_data[0] == '':
             output(code, out_data)
 
 
