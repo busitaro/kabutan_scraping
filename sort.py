@@ -7,7 +7,7 @@ from setting.config import Config
 
 def main():
     config = Config()
-    file_path = config.output_path()
+    file_path = config.output_path
 
     for file, data in input_data(file_path).items():
         data = data.groupby(level=0).last()

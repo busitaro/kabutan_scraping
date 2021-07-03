@@ -49,7 +49,7 @@ def get_data(code, from_date, end_date):
 def output(code, data):
     data = sorted(data, key=lambda x: x[0])
     config = Config()
-    path_to_output = '{}/{}'.format(config.output_path(), out_file.format(code=code))
+    path_to_output = '{}/{}'.format(config.output_path, out_file.format(code=code))
     with open(path_to_output, 'a', encoding='utf_8', newline='') as f:
         writer = csv.writer(f, quoting=csv.QUOTE_ALL)
         writer.writerows(data)

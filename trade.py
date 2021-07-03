@@ -40,7 +40,7 @@ def main():
     for code in range(1300, 10000):
         time.sleep(sleep_time / 1000)
         out_data = get_data(code)
-        if len(out_data) != 0 or out_data[0] == '':
+        if len(out_data) != 0 and out_data[0] != '':
             output(code, out_data)
 
 
