@@ -16,7 +16,7 @@ def get_pbr(soup):
 
 def main():
     config = Config()
-    path_to_output = '{}/{}'.format(config.output_path(), out_file)
+    path_to_output = '{}/{}'.format(config.output_path, out_file)
     with open(path_to_output, 'w') as f:
         writer = csv.writer(f, quoting=csv.QUOTE_ALL)
         for code in range(1300, 10000):
